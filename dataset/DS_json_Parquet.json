@@ -1,5 +1,5 @@
 {
-	"name": "DS_Parquet",
+	"name": "DS_json_Parquet",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DL_ADLSSRC",
