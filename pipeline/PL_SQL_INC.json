@@ -1,0 +1,20 @@
+{
+	"name": "PL_SQL_INC",
+	"properties": {
+		"parameters": {
+			"Schema": {
+				"type": "string"
+			},
+			"Table": {
+				"type": "string"
+			},
+			"Watermark": {
+				"type": "string"
+			},
+			"LLV": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
