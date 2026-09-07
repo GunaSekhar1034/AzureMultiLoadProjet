@@ -224,7 +224,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_Json",
+						"referenceName": "DS_Json_SRC",
 						"type": "DatasetReference"
 					}
 				],
