@@ -1,0 +1,27 @@
+{
+	"name": "LS_SqlServer",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "GUNA_SEKHAR\\MSLOCALDB",
+			"database": "vbadeproject",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "sa",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "SQL_local_pswd",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SQL-Local-Proj"
+			}
+		},
+		"connectVia": {
+			"referenceName": "Selfhost-SQL-IR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
