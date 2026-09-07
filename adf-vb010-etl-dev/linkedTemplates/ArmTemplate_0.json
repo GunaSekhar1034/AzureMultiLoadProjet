@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "https://adlsdevvbsrc.dfs.core.windows.net/"
 		},
+		"Key_SnowFlake_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
+		},
 		"LS_JSON_ADLSRAW_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsdevfinalraw.dfs.core.windows.net/"
@@ -31,9 +35,25 @@
 			"type": "string",
 			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
 		},
-		"Key_SnowFlake_properties_typeProperties_baseUrl": {
+		"LK_Sftp_properties_typeProperties_host": {
 			"type": "string",
-			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
+			"defaultValue": "adlsdevfinalraw.blob.core.windows.net"
+		},
+		"LK_Sftp_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adlsdevfinalraw.sftplocal"
+		},
+		"LK_SnowFlake_Blob_Stage_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'LK_SnowFlake_Blob_Stage'"
+		},
+		"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
+			"type": "string",
+			"defaultValue": "SAS-token-SnowFlake"
+		},
+		"LK_Snowflake_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "ABAZURESNOW"
 		},
 		"LS_SqlServer_properties_typeProperties_server": {
 			"type": "string",
@@ -46,18 +66,6 @@
 		"LS_SqlServer_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "sa"
-		},
-		"LK_Snowflake_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "ABAZURESNOW"
-		},
-		"LK_SnowFlake_Blob_Stage_sasUri": {
-			"type": "secureString",
-			"metadata": "Secure string for 'sasUri' of 'LK_SnowFlake_Blob_Stage'"
-		},
-		"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
-			"type": "string",
-			"defaultValue": "SAS-token-SnowFlake"
 		}
 	},
 	"variables": {
@@ -77,6 +85,19 @@
 						"type": "SecureString",
 						"value": "[parameters('DL_ADLSSRC_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Key_SnowFlake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('Key_SnowFlake_properties_typeProperties_baseUrl')]"
 				}
 			},
 			"dependsOn": []
@@ -133,19 +154,6 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Key_SnowFlake')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureKeyVault",
-				"typeProperties": {
-					"baseUrl": "[parameters('Key_SnowFlake_properties_typeProperties_baseUrl')]"
-				}
 			},
 			"dependsOn": []
 		},
@@ -259,6 +267,68 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_SFTP_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DL_ADLSSRC",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "olist_customers_dataset",
+						"folderPath": {
+							"value": "@concat(\n    'SFTP/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
+							"type": "Expression"
+						},
+						"fileSystem": "input"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "order_id",
+						"type": "UTF8"
+					},
+					{
+						"name": "customer_id",
+						"type": "UTF8"
+					},
+					{
+						"name": "order_status",
+						"type": "UTF8"
+					},
+					{
+						"name": "order_purchase_timestamp",
+						"type": "INT96"
+					},
+					{
+						"name": "order_approved_at",
+						"type": "INT96"
+					},
+					{
+						"name": "order_delivered_carrier_date",
+						"type": "INT96"
+					},
+					{
+						"name": "order_delivered_customer_date",
+						"type": "INT96"
+					},
+					{
+						"name": "order_estimated_delivery_date",
+						"type": "INT96"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DL_ADLSSRC')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_json_Parquet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -288,35 +358,52 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/LS_SqlServer')]",
+			"name": "[concat(parameters('factoryName'), '/LK_Sftp')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "SqlServer",
+				"type": "Sftp",
 				"typeProperties": {
-					"server": "[parameters('LS_SqlServer_properties_typeProperties_server')]",
-					"database": "[parameters('LS_SqlServer_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": true,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_SqlServer_properties_typeProperties_userName')]",
+					"host": "[parameters('LK_Sftp_properties_typeProperties_host')]",
+					"port": 22,
+					"skipHostKeyValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('LK_Sftp_properties_typeProperties_userName')]",
 					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "Key_SnowFlake",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "SFTP-Key"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Key_SnowFlake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LK_SnowFlake_Blob_Stage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]",
+					"sasToken": {
 						"type": "AzureKeyVaultSecret",
 						"store": {
 							"referenceName": "SQL_local_pswd",
 							"type": "LinkedServiceReference"
 						},
-						"secretName": "SQL-Local-Proj"
+						"secretName": "[parameters('LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName')]"
 					}
-				},
-				"connectVia": {
-					"referenceName": "Selfhost-SQL-IR",
-					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/Selfhost-SQL-IR')]",
 				"[concat(variables('factoryId'), '/linkedServices/SQL_local_pswd')]"
 			]
 		},
@@ -349,25 +436,35 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/LK_SnowFlake_Blob_Stage')]",
+			"name": "[concat(parameters('factoryName'), '/LS_SqlServer')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "AzureBlobStorage",
+				"type": "SqlServer",
 				"typeProperties": {
-					"sasUri": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]",
-					"sasToken": {
+					"server": "[parameters('LS_SqlServer_properties_typeProperties_server')]",
+					"database": "[parameters('LS_SqlServer_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('LS_SqlServer_properties_typeProperties_userName')]",
+					"password": {
 						"type": "AzureKeyVaultSecret",
 						"store": {
 							"referenceName": "SQL_local_pswd",
 							"type": "LinkedServiceReference"
 						},
-						"secretName": "[parameters('LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName')]"
+						"secretName": "SQL-Local-Proj"
 					}
+				},
+				"connectVia": {
+					"referenceName": "Selfhost-SQL-IR",
+					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/Selfhost-SQL-IR')]",
 				"[concat(variables('factoryId'), '/linkedServices/SQL_local_pswd')]"
 			]
 		},
@@ -718,27 +815,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_SqlServer_SRC')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_SqlServer",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "ADF_Watermark_Table"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_SqlServer')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/DB_Snowflake_SRC')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -803,158 +879,52 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_SnowFlake_Stage')]",
+			"name": "[concat(parameters('factoryName'), '/DS_SFTP_CSV')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LK_SnowFlake_Blob_Stage",
+					"referenceName": "LK_Sftp",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "olist_order_items_dataset",
-						"folderPath": "SnowFlake_stage",
-						"container": "input"
+						"type": "SftpLocation",
+						"fileName": "olist_customers_dataset.csv",
+						"folderPath": "/SFTP"
 					},
-					"compressionCodec": "snappy"
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
 				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LK_SnowFlake_Blob_Stage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Sql_Adls')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
+				"schema": [
 					{
-						"name": "LKP_SQL_Watermark",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderQuery": {
-									"value": "SELECT [TableSchema]\n      ,[TableName]\n      ,[WatermarkColumn]\n      ,[LastLoadValue]\n  FROM [dbo].[ADF_Watermark_Table]",
-									"type": "Expression"
-								},
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "DS_SqlServer_SRC",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
+						"name": "customer_id",
+						"type": "String"
 					},
 					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "LKP_SQL_Watermark",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('LKP_SQL_Watermark').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "CPY_EACH_TABLE",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "SqlServerSource",
-											"sqlReaderQuery": {
-												"value": "@concat(\n    'select * from ',\n    item().TableSchema,'.', item().TableName)",
-												"type": "Expression"
-											},
-											"queryTimeout": "02:00:00",
-											"partitionOption": "None"
-										},
-										"sink": {
-											"type": "ParquetSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "ParquetWriteSettings"
-											}
-										},
-										"enableStaging": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"typeConversion": true,
-											"typeConversionSettings": {
-												"allowDataTruncation": true,
-												"treatBooleanAsNumber": false
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "DS_SqlServer_SRC",
-											"type": "DatasetReference",
-											"parameters": {}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "DB_SQL_Parquet",
-											"type": "DatasetReference",
-											"parameters": {
-												"TableName": {
-													"value": "@item().TableName",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
+						"name": "customer_unique_id",
+						"type": "String"
+					},
+					{
+						"name": "customer_zip_code_prefix",
+						"type": "String"
+					},
+					{
+						"name": "customer_city",
+						"type": "String"
+					},
+					{
+						"name": "customer_state",
+						"type": "String"
 					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
+				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_SqlServer_SRC')]",
-				"[concat(variables('factoryId'), '/datasets/DB_SQL_Parquet')]"
+				"[concat(variables('factoryId'), '/linkedServices/LK_Sftp')]"
 			]
 		}
 	]

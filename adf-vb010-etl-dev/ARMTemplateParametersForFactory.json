@@ -14,6 +14,24 @@
 		"DL_ADLSSRC_properties_typeProperties_url": {
 			"value": "https://adlsdevvbsrc.dfs.core.windows.net/"
 		},
+		"Key_SnowFlake_properties_typeProperties_baseUrl": {
+			"value": "https://sqlServerPswd.vault.azure.net/"
+		},
+		"LK_Sftp_properties_typeProperties_host": {
+			"value": "adlsdevfinalraw.blob.core.windows.net"
+		},
+		"LK_Sftp_properties_typeProperties_userName": {
+			"value": "adlsdevfinalraw.sftplocal"
+		},
+		"LK_SnowFlake_Blob_Stage_sasUri": {
+			"value": ""
+		},
+		"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
+			"value": "SAS-token-SnowFlake"
+		},
+		"LK_Snowflake_properties_typeProperties_database": {
+			"value": "ABAZURESNOW"
+		},
 		"LS_JSON_ADLSRAW_properties_typeProperties_url": {
 			"value": "https://adlsdevfinalraw.dfs.core.windows.net/"
 		},
@@ -31,18 +49,6 @@
 		},
 		"SQL_local_pswd_properties_typeProperties_baseUrl": {
 			"value": "https://sqlServerPswd.vault.azure.net/"
-		},
-		"Key_SnowFlake_properties_typeProperties_baseUrl": {
-			"value": "https://sqlServerPswd.vault.azure.net/"
-		},
-		"LK_Snowflake_properties_typeProperties_database": {
-			"value": "ABAZURESNOW"
-		},
-		"LK_SnowFlake_Blob_Stage_sasUri": {
-			"value": ""
-		},
-		"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
-			"value": "SAS-token-SnowFlake"
 		}
 	}
 }
