@@ -11,10 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "olist_order_items_dataset",
-				"folderPath": {
-					"value": "\n@concat(\n    'SnowFlake_stage/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
-					"type": "Expression"
-				},
+				"folderPath": "SnowFlake_stage",
 				"container": "input"
 			},
 			"compressionCodec": "snappy"
