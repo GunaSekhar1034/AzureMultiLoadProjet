@@ -1,0 +1,22 @@
+{
+	"name": "LK_Sftp",
+	"properties": {
+		"annotations": [],
+		"type": "Sftp",
+		"typeProperties": {
+			"host": "adlsdevfinalraw.blob.core.windows.net",
+			"port": 22,
+			"skipHostKeyValidation": true,
+			"authenticationType": "Basic",
+			"userName": "adlsdevfinalraw.sftplocal",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "Key_SnowFlake",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SFTP-Key"
+			}
+		}
+	}
+}
