@@ -10,8 +10,9 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "JsonFile",
 				"folderPath": {
-					"value": "@concat(\n    'json/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd'), '/JsonFile.parquet'\n)",
+					"value": "@concat(\n    'json/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
 					"type": "Expression"
 				},
 				"fileSystem": "input"
