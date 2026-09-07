@@ -54,7 +54,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@or(\nequals(pipeline().parameters.LLV, null),\ngreater(int(activity('LKP_MAX_VAL').output.firstRow.maxValue),int(pipeline().parameters.LLV))\n)",
+						"value": "@or(\nequals(pipeline().parameters.LLV, null),\ngreater(int(coalesce(activity('LKP_MAX_VAL').output.firstRow.maxValue,0)),int(pipeline().parameters.LLV))\n)",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
