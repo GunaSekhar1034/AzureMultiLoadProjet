@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-vb010-etl-dev"
+		},
+		"DL_ADLSSRC_accountKey": {
+			"value": ""
+		},
+		"LS_JSON_ADLSRAW_accountKey": {
+			"value": ""
+		},
+		"DL_ADLSSRC_properties_typeProperties_url": {
+			"value": "https://adlsdevvbsrc.dfs.core.windows.net/"
+		},
+		"LS_JSON_ADLSRAW_properties_typeProperties_url": {
+			"value": "https://adlsdevfinalraw.dfs.core.windows.net/"
+		},
+		"LS_RestAPI_properties_typeProperties_url": {
+			"value": "https://retoolapi.dev/sGwPeG/product_category_name_translation"
+		},
+		"LS_SqlServer_properties_typeProperties_server": {
+			"value": "GUNA_SEKHAR\\MSLOCALDB"
+		},
+		"LS_SqlServer_properties_typeProperties_database": {
+			"value": "vbadeproject"
+		},
+		"LS_SqlServer_properties_typeProperties_userName": {
+			"value": "sa"
+		},
+		"SQL_local_pswd_properties_typeProperties_baseUrl": {
+			"value": "https://sqlServerPswd.vault.azure.net/"
+		}
+	}
+}
