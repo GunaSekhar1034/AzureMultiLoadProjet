@@ -1,0 +1,157 @@
+{
+	"name": "PL_Snowflake_bloob",
+	"properties": {
+		"activities": [
+			{
+				"name": "CPY_SnowFlake",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SnowflakeV2Source",
+						"exportSettings": {
+							"type": "SnowflakeExportCopyCommand"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "LK_SnowFlake_Blob_Stage",
+							"type": "LinkedServiceReference"
+						}
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ORDER_ID",
+									"type": "String",
+									"physicalType": "VARCHAR"
+								},
+								"sink": {
+									"name": "ORDER_ID",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "ORDER_ITEM_ID",
+									"type": "Decimal",
+									"physicalType": "NUMBER",
+									"scale": 0,
+									"precision": 38
+								},
+								"sink": {
+									"name": "ORDER_ITEM_ID",
+									"type": "Decimal",
+									"physicalType": "DECIMAL"
+								}
+							},
+							{
+								"source": {
+									"name": "PRODUCT_ID",
+									"type": "String",
+									"physicalType": "VARCHAR"
+								},
+								"sink": {
+									"name": "PRODUCT_ID",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "SELLER_ID",
+									"type": "String",
+									"physicalType": "VARCHAR"
+								},
+								"sink": {
+									"name": "SELLER_ID",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "SHIPPING_LIMIT_DATE",
+									"type": "DateTimeOffset",
+									"physicalType": "TIMESTAMP_NTZ"
+								},
+								"sink": {
+									"name": "SHIPPING_LIMIT_DATE",
+									"type": "DateTimeOffset",
+									"physicalType": "INT_96"
+								}
+							},
+							{
+								"source": {
+									"name": "PRICE",
+									"type": "Decimal",
+									"physicalType": "NUMBER",
+									"scale": 2,
+									"precision": 38
+								},
+								"sink": {
+									"name": "PRICE",
+									"type": "Decimal",
+									"physicalType": "DECIMAL"
+								}
+							},
+							{
+								"source": {
+									"name": "FREIGHT_VALUE",
+									"type": "Decimal",
+									"physicalType": "NUMBER",
+									"scale": 2,
+									"precision": 38
+								},
+								"sink": {
+									"name": "FREIGHT_VALUE",
+									"type": "Decimal",
+									"physicalType": "DECIMAL"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DB_Snowflake_SRC",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_SnowFlake_Stage",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
