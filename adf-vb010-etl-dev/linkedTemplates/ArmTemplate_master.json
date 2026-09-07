@@ -43,6 +43,18 @@
 			"type": "string",
 			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
 		},
+		"Key_SnowFlake_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
+		},
+		"LK_Snowflake_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "ABAZURESNOW"
+		},
+		"LK_SnowFlake_Blob_Stage_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'LK_SnowFlake_Blob_Stage'"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -88,6 +100,12 @@
 					"SQL_local_pswd_properties_typeProperties_baseUrl": {
 						"value": "[parameters('SQL_local_pswd_properties_typeProperties_baseUrl')]"
 					},
+					"Key_SnowFlake_properties_typeProperties_baseUrl": {
+						"value": "[parameters('Key_SnowFlake_properties_typeProperties_baseUrl')]"
+					},
+					"LK_SnowFlake_Blob_Stage_sasUri": {
+						"value": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]"
+					},
 					"LS_SqlServer_properties_typeProperties_server": {
 						"value": "[parameters('LS_SqlServer_properties_typeProperties_server')]"
 					},
@@ -96,10 +114,33 @@
 					},
 					"LS_SqlServer_properties_typeProperties_userName": {
 						"value": "[parameters('LS_SqlServer_properties_typeProperties_userName')]"
+					},
+					"LK_Snowflake_properties_typeProperties_database": {
+						"value": "[parameters('LK_Snowflake_properties_typeProperties_database')]"
 					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "adf-vb010-etl-dev_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-vb010-etl-dev_ArmTemplate_0')]"
+			]
 		}
 	]
 }

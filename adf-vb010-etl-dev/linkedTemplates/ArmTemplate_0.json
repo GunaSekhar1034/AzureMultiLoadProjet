@@ -31,6 +31,14 @@
 			"type": "string",
 			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
 		},
+		"Key_SnowFlake_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
+		},
+		"LK_SnowFlake_Blob_Stage_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'LK_SnowFlake_Blob_Stage'"
+		},
 		"LS_SqlServer_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "GUNA_SEKHAR\\MSLOCALDB"
@@ -42,6 +50,10 @@
 		"LS_SqlServer_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "sa"
+		},
+		"LK_Snowflake_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "ABAZURESNOW"
 		}
 	},
 	"variables": {
@@ -117,6 +129,32 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Key_SnowFlake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('Key_SnowFlake_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LK_SnowFlake_Blob_Stage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]"
+				}
 			},
 			"dependsOn": []
 		},
@@ -289,6 +327,60 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/Selfhost-SQL-IR')]",
 				"[concat(variables('factoryId'), '/linkedServices/SQL_local_pswd')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LK_Snowflake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SnowflakeV2",
+				"typeProperties": {
+					"authenticationType": "Basic",
+					"accountIdentifier": "EYEDOPT-UX23027",
+					"user": "GUNA10345",
+					"database": "[parameters('LK_Snowflake_properties_typeProperties_database')]",
+					"warehouse": "COMPUTE_WH",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "Key_SnowFlake",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "SnowFlakePswd"
+					}
+				},
+				"version": "1.1"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Key_SnowFlake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SnowFlake_Stage')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LK_SnowFlake_Blob_Stage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "olist_order_items_dataset",
+						"folderPath": "SnowFlake_stage",
+						"container": "input"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LK_SnowFlake_Blob_Stage')]"
 			]
 		},
 		{
@@ -656,6 +748,70 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_SqlServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DB_Snowflake_SRC')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LK_Snowflake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "ORDER_ID",
+						"type": "VARCHAR",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "ORDER_ITEM_ID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "PRODUCT_ID",
+						"type": "VARCHAR",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "SELLER_ID",
+						"type": "VARCHAR",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "SHIPPING_LIMIT_DATE",
+						"type": "TIMESTAMP_NTZ",
+						"precision": 0,
+						"scale": 9
+					},
+					{
+						"name": "PRICE",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 2
+					},
+					{
+						"name": "FREIGHT_VALUE",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 2
+					}
+				],
+				"typeProperties": {
+					"schema": "AZURE_INTEGRATION",
+					"table": "OLIST_ORDER_ITEMS_DATASET"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LK_Snowflake')]"
 			]
 		},
 		{

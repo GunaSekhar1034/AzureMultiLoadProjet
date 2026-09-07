@@ -31,6 +31,15 @@
 		},
 		"SQL_local_pswd_properties_typeProperties_baseUrl": {
 			"value": "https://sqlServerPswd.vault.azure.net/"
+		},
+		"Key_SnowFlake_properties_typeProperties_baseUrl": {
+			"value": "https://sqlServerPswd.vault.azure.net/"
+		},
+		"LK_Snowflake_properties_typeProperties_database": {
+			"value": "ABAZURESNOW"
+		},
+		"LK_SnowFlake_Blob_Stage_sasUri": {
+			"value": ""
 		}
 	}
 }
