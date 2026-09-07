@@ -40,6 +40,9 @@
 		},
 		"LK_SnowFlake_Blob_Stage_sasUri": {
 			"value": ""
+		},
+		"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
+			"value": "SAS-token-SnowFlake"
 		}
 	}
 }

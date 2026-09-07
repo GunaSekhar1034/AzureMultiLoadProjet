@@ -35,10 +35,6 @@
 			"type": "string",
 			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
 		},
-		"LK_SnowFlake_Blob_Stage_sasUri": {
-			"type": "secureString",
-			"metadata": "Secure string for 'sasUri' of 'LK_SnowFlake_Blob_Stage'"
-		},
 		"LS_SqlServer_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "GUNA_SEKHAR\\MSLOCALDB"
@@ -54,6 +50,14 @@
 		"LK_Snowflake_properties_typeProperties_database": {
 			"type": "string",
 			"defaultValue": "ABAZURESNOW"
+		},
+		"LK_SnowFlake_Blob_Stage_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'LK_SnowFlake_Blob_Stage'"
+		},
+		"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
+			"type": "string",
+			"defaultValue": "SAS-token-SnowFlake"
 		}
 	},
 	"variables": {
@@ -141,19 +145,6 @@
 				"type": "AzureKeyVault",
 				"typeProperties": {
 					"baseUrl": "[parameters('Key_SnowFlake_properties_typeProperties_baseUrl')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LK_SnowFlake_Blob_Stage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"sasUri": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]"
 				}
 			},
 			"dependsOn": []
@@ -358,29 +349,26 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_SnowFlake_Stage')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/LK_SnowFlake_Blob_Stage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LK_SnowFlake_Blob_Stage",
-					"type": "LinkedServiceReference"
-				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "olist_order_items_dataset",
-						"folderPath": "SnowFlake_stage",
-						"container": "input"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
+					"sasUri": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]",
+					"sasToken": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "SQL_local_pswd",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName')]"
+					}
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LK_SnowFlake_Blob_Stage')]"
+				"[concat(variables('factoryId'), '/linkedServices/SQL_local_pswd')]"
 			]
 		},
 		{
@@ -812,6 +800,32 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LK_Snowflake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SnowFlake_Stage')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LK_SnowFlake_Blob_Stage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "olist_order_items_dataset",
+						"folderPath": "SnowFlake_stage",
+						"container": "input"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LK_SnowFlake_Blob_Stage')]"
 			]
 		},
 		{

@@ -54,6 +54,10 @@
 		"LK_SnowFlake_Blob_Stage_sasUri": {
 			"type": "secureString",
 			"metadata": "Secure string for 'sasUri' of 'LK_SnowFlake_Blob_Stage'"
+		},
+		"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
+			"type": "string",
+			"defaultValue": "SAS-token-SnowFlake"
 		}
 	},
 	"variables": {
@@ -983,10 +987,20 @@
 				"annotations": [],
 				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"sasUri": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]"
+					"sasUri": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]",
+					"sasToken": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "SQL_local_pswd",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName')]"
+					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SQL_local_pswd')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_SnowFlake_Stage')]",
