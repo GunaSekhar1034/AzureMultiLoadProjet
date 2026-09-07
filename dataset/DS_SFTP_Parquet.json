@@ -1,0 +1,57 @@
+{
+	"name": "DS_SFTP_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DL_ADLSSRC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "olist_customers_dataset",
+				"folderPath": {
+					"value": "@concat(\n    'SFTP/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
+					"type": "Expression"
+				},
+				"fileSystem": "input"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "order_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "customer_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "order_status",
+				"type": "UTF8"
+			},
+			{
+				"name": "order_purchase_timestamp",
+				"type": "INT96"
+			},
+			{
+				"name": "order_approved_at",
+				"type": "INT96"
+			},
+			{
+				"name": "order_delivered_carrier_date",
+				"type": "INT96"
+			},
+			{
+				"name": "order_delivered_customer_date",
+				"type": "INT96"
+			},
+			{
+				"name": "order_estimated_delivery_date",
+				"type": "INT96"
+			}
+		]
+	}
+}
