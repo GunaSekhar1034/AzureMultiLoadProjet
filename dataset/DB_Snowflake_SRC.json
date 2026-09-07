@@ -1,5 +1,5 @@
 {
-	"name": "DB_Snowflake",
+	"name": "DB_Snowflake_SRC",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LK_Snowflake",
