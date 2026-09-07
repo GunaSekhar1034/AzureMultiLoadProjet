@@ -1,0 +1,24 @@
+{
+	"name": "DS_SnowFlake_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DL_ADLSSRC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "olist_order_items_dataset",
+				"folderPath": {
+					"value": "@concat(\n    'SnowFlake/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
+					"type": "Expression"
+				},
+				"fileSystem": "input"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
