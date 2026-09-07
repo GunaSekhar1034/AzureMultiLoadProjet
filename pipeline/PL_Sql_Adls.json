@@ -32,7 +32,7 @@
 				}
 			},
 			{
-				"name": "ForEachTableValue",
+				"name": "ForEach1",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -50,38 +50,64 @@
 					},
 					"activities": [
 						{
-							"name": "EXEC_INC",
-							"type": "ExecutePipeline",
+							"name": "CPY_EACH_TABLE",
+							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
 								"secureInput": false
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"pipeline": {
-									"referenceName": "PL_SQL_INC",
-									"type": "PipelineReference"
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat(\n    'select * from ',\n    item().TableSchema,'.', item().TableName)",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
 								},
-								"waitOnCompletion": true,
-								"parameters": {
-									"Schema": {
-										"value": "@item().TableSchema",
-										"type": "Expression"
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
 									},
-									"Table": {
-										"value": "@item().TableName",
-										"type": "Expression"
-									},
-									"Watermark": {
-										"value": "@item().WatermarkColumn",
-										"type": "Expression"
-									},
-									"LLV": {
-										"value": "@item().LastLoadValue",
-										"type": "Expression"
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
 									}
 								}
-							}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_SqlServer_SRC",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DB_SQL_Parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": {
+											"value": "@item().TableName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
 						}
 					]
 				}
