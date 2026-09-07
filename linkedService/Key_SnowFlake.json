@@ -1,0 +1,10 @@
+{
+	"name": "Key_SnowFlake",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://sqlServerPswd.vault.azure.net/"
+		}
+	}
+}
