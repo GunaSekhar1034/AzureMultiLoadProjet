@@ -1,0 +1,16 @@
+{
+	"name": "DS_SqlServer_SRC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SqlServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ADF_Watermark_Table"
+		}
+	}
+}
