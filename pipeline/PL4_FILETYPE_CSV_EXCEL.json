@@ -65,15 +65,27 @@
 							"value": "excel",
 							"activities": [
 								{
-									"name": "EXEC_PL4_2_EXCEL",
-									"type": "ExecutePipeline",
+									"name": "LKUP_GET_FILETYPE_CSV_EXCEL",
+									"type": "Lookup",
 									"dependsOn": [],
 									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
 										"secureInput": false
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"waitOnCompletion": true
+										"source": {
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"dataset": {
+											"referenceName": "DS_AZSQLDB_METADATA",
+											"type": "DatasetReference"
+										}
 									}
 								}
 							]
