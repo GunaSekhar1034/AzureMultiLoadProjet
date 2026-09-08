@@ -31,7 +31,7 @@
 				}
 			},
 			{
-				"name": "Switch1",
+				"name": "Switch_CSV_EXCEL_File",
 				"type": "Switch",
 				"dependsOn": [
 					{
@@ -43,6 +43,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"on": {
+						"value": "@activity('LKUP_GET_FILETYPE_CSV_EXCEL').output.firstRow.L4_switch_type ",
+						"type": "Expression"
+					},
 					"cases": [
 						{
 							"value": "csv",
@@ -56,7 +60,17 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"waitOnCompletion": true
+										"pipeline": {
+											"referenceName": "PL4_1_CSV",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"Trigger": {
+												"value": "@pipeline().parameters.Trigger",
+												"type": "Expression"
+											}
+										}
 									}
 								}
 							]
@@ -65,27 +79,15 @@
 							"value": "excel",
 							"activities": [
 								{
-									"name": "LKUP_GET_FILETYPE_CSV_EXCEL",
-									"type": "Lookup",
+									"name": "EXEC_PL4_2_EXCEL",
+									"type": "ExecutePipeline",
 									"dependsOn": [],
 									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
 										"secureInput": false
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"source": {
-											"type": "AzureSqlSource",
-											"queryTimeout": "02:00:00",
-											"partitionOption": "None"
-										},
-										"dataset": {
-											"referenceName": "DS_AZSQLDB_METADATA",
-											"type": "DatasetReference"
-										}
+										"waitOnCompletion": true
 									}
 								}
 							]
