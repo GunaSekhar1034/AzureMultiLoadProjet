@@ -1,0 +1,23 @@
+{
+	"name": "LK_AzureSql",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "sql-srvr-vb-dev-f.database.windows.net",
+			"database": "sql-db-vb-dev",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "access-data-dev",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "Key_SnowFlake",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "AzureSql"
+			}
+		}
+	}
+}
