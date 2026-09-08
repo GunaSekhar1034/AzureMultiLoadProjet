@@ -60,6 +60,23 @@
 									}
 								}
 							]
+						},
+						{
+							"value": "excel",
+							"activities": [
+								{
+									"name": "EXEC_PL4_2_EXCEL",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"policy": {
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"waitOnCompletion": true
+									}
+								}
+							]
 						}
 					]
 				}
