@@ -1,0 +1,64 @@
+{
+	"name": "PL1_master",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set_Var_Trigger",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Trigger_variable",
+					"value": {
+						"value": "@if(equals(pipeline().parameters.Trigger, null),\n    pipeline().TriggerName ,\n    pipeline().parameters.Trigger)\n    ",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "EXEC_RAW_DATA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Set_Var_Trigger",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL2_Raw_data",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"Trigger": {
+							"value": "@pipeline().parameters.Trigger",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"Trigger": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"Trigger_variable": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
