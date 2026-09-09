@@ -65,7 +65,7 @@
 		"LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url": {
 			"value": "@{linkedService().storage_account_loc}"
 		},
-		"trigger1_properties_typeProperties_scope": {
+		"trigger_Blob_adls_properties_typeProperties_scope": {
 			"value": "/subscriptions/f2ffe78a-9efd-46b7-aa00-1775097eab64/resourceGroups/VB_DEV_B10_ETL/providers/Microsoft.Storage/storageAccounts/adlsdevbstdblob"
 		}
 	}

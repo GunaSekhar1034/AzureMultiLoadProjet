@@ -87,7 +87,7 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().storage_account_loc}"
 		},
-		"trigger1_properties_typeProperties_scope": {
+		"trigger_Blob_adls_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/f2ffe78a-9efd-46b7-aa00-1775097eab64/resourceGroups/VB_DEV_B10_ETL/providers/Microsoft.Storage/storageAccounts/adlsdevbstdblob"
 		},
@@ -196,8 +196,8 @@
 					"LS_SqlServer_properties_typeProperties_userName": {
 						"value": "[parameters('LS_SqlServer_properties_typeProperties_userName')]"
 					},
-					"trigger1_properties_typeProperties_scope": {
-						"value": "[parameters('trigger1_properties_typeProperties_scope')]"
+					"trigger_Blob_adls_properties_typeProperties_scope": {
+						"value": "[parameters('trigger_Blob_adls_properties_typeProperties_scope')]"
 					}
 				}
 			},

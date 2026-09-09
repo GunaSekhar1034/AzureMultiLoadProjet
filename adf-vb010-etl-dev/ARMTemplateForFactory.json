@@ -87,7 +87,7 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().storage_account_loc}"
 		},
-		"trigger1_properties_typeProperties_scope": {
+		"trigger_Blob_adls_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/f2ffe78a-9efd-46b7-aa00-1775097eab64/resourceGroups/VB_DEV_B10_ETL/providers/Microsoft.Storage/storageAccounts/adlsdevbstdblob"
 		}
@@ -2746,7 +2746,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"name": "[concat(parameters('factoryName'), '/trigger_Blob_adls')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2765,7 +2765,7 @@
 				"typeProperties": {
 					"blobPathBeginsWith": "/input/blobs/SnowFlake_stage/",
 					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('trigger1_properties_typeProperties_scope')]",
+					"scope": "[parameters('trigger_Blob_adls_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobCreated"
 					]
