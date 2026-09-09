@@ -1,0 +1,27 @@
+{
+	"name": "DS_SNOWFLAKE_BLOB_ADLS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DL_ADLSSRC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "olist_order_items_dataset",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat(\n    'SnowFlake/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)\n",
+					"type": "Expression"
+				},
+				"fileSystem": "input"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
