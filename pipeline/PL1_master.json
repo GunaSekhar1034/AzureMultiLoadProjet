@@ -51,7 +51,8 @@
 		],
 		"parameters": {
 			"Trigger": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Tr_sample_csv"
 			}
 		},
 		"variables": {
