@@ -70,18 +70,6 @@
 		"LK_Snowflake_properties_typeProperties_database": {
 			"type": "string",
 			"defaultValue": "ABAZURESNOW"
-		},
-		"LS_SqlServer_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "GUNA_SEKHAR\\MSLOCALDB"
-		},
-		"LS_SqlServer_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "vbadeproject"
-		},
-		"LS_SqlServer_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "sa"
 		}
 	},
 	"variables": {
@@ -264,7 +252,12 @@
 				"linkedServiceName": {
 					"referenceName": "LS_AZADLS_VB_CLOUD_RAW",
 					"type": "LinkedServiceReference",
-					"parameters": {}
+					"parameters": {
+						"storage_account_loc": {
+							"value": "@dataset().storage_account_loc",
+							"type": "Expression"
+						}
+					}
 				},
 				"parameters": {
 					"storage_account_loc": {
@@ -282,6 +275,10 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
 						"folderPath": "CSV",
 						"fileSystem": "input"
 					},
@@ -297,6 +294,79 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_AZADLS_VB_CLOUD_RAW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_PARQUET')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DL_ADLSSRC",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TgtDirectory": {
+						"type": "string"
+					},
+					"Filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().Filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(\n    dataset().TgtDirectory,'/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
+							"type": "Expression"
+						},
+						"fileSystem": "input"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "order_id",
+						"type": "UTF8"
+					},
+					{
+						"name": "customer_id",
+						"type": "UTF8"
+					},
+					{
+						"name": "order_status",
+						"type": "UTF8"
+					},
+					{
+						"name": "order_purchase_timestamp",
+						"type": "INT96"
+					},
+					{
+						"name": "order_approved_at",
+						"type": "INT96"
+					},
+					{
+						"name": "order_delivered_carrier_date",
+						"type": "INT96"
+					},
+					{
+						"name": "order_delivered_customer_date",
+						"type": "INT96"
+					},
+					{
+						"name": "order_estimated_delivery_date",
+						"type": "INT96"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DL_ADLSSRC')]"
 			]
 		},
 		{
@@ -566,39 +636,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/Key_SnowFlake')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_SqlServer')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"server": "[parameters('LS_SqlServer_properties_typeProperties_server')]",
-					"database": "[parameters('LS_SqlServer_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": true,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_SqlServer_properties_typeProperties_userName')]",
-					"password": {
-						"type": "AzureKeyVaultSecret",
-						"store": {
-							"referenceName": "SQL_local_pswd",
-							"type": "LinkedServiceReference"
-						},
-						"secretName": "SQL-Local-Proj"
-					}
-				},
-				"connectVia": {
-					"referenceName": "Selfhost-SQL-IR",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/Selfhost-SQL-IR')]",
-				"[concat(variables('factoryId'), '/linkedServices/SQL_local_pswd')]"
 			]
 		}
 	]

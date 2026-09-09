@@ -157,15 +157,6 @@
 					},
 					"LK_Snowflake_properties_typeProperties_database": {
 						"value": "[parameters('LK_Snowflake_properties_typeProperties_database')]"
-					},
-					"LS_SqlServer_properties_typeProperties_server": {
-						"value": "[parameters('LS_SqlServer_properties_typeProperties_server')]"
-					},
-					"LS_SqlServer_properties_typeProperties_database": {
-						"value": "[parameters('LS_SqlServer_properties_typeProperties_database')]"
-					},
-					"LS_SqlServer_properties_typeProperties_userName": {
-						"value": "[parameters('LS_SqlServer_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -184,6 +175,15 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"LS_SqlServer_properties_typeProperties_server": {
+						"value": "[parameters('LS_SqlServer_properties_typeProperties_server')]"
+					},
+					"LS_SqlServer_properties_typeProperties_database": {
+						"value": "[parameters('LS_SqlServer_properties_typeProperties_database')]"
+					},
+					"LS_SqlServer_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SqlServer_properties_typeProperties_userName')]"
 					}
 				}
 			},
