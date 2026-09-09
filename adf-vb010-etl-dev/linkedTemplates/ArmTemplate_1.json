@@ -529,8 +529,6 @@
 					{
 						"name": "LKUP_JOB_DETAILS",
 						"type": "Lookup",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -611,8 +609,6 @@
 					{
 						"name": "Set Mapping Variable",
 						"type": "SetVariable",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"secureOutput": false,
@@ -688,15 +684,6 @@
 								}
 							}
 						]
-					},
-					{
-						"name": "Wait1",
-						"type": "Wait",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"waitTimeInSeconds": 1
-						}
 					}
 				],
 				"policy": {
@@ -1171,7 +1158,7 @@
 							},
 							"cases": [
 								{
-									"value": "azure",
+									"value": "Azure",
 									"activities": [
 										{
 											"name": "EXEC_FILE_CSV",
@@ -1298,7 +1285,7 @@
 							},
 							"cases": [
 								{
-									"value": "CloudeStorage",
+									"value": "CloudStorage",
 									"activities": [
 										{
 											"name": "EXEC_PL3_Cloud_data",
@@ -1485,7 +1472,8 @@
 				},
 				"parameters": {
 					"Trigger": {
-						"type": "string"
+						"type": "string",
+						"defaultValue": "Tr_sample_csv"
 					}
 				},
 				"variables": {
