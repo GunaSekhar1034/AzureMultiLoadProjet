@@ -20,9 +20,6 @@
 			},
 			"filename": {
 				"type": "string"
-			},
-			"TGT_Directory": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -35,7 +32,7 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@dataset().TGT_Directory",
+					"value": "CSV",
 					"type": "Expression"
 				},
 				"fileSystem": "input"
