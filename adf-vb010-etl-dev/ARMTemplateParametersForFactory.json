@@ -17,6 +17,15 @@
 		"Key_SnowFlake_properties_typeProperties_baseUrl": {
 			"value": "https://sqlServerPswd.vault.azure.net/"
 		},
+		"LK_AzureSql_properties_typeProperties_server": {
+			"value": "sql-srvr-vb-dev-f.database.windows.net"
+		},
+		"LK_AzureSql_properties_typeProperties_database": {
+			"value": "sql-db-vb-dev"
+		},
+		"LK_AzureSql_properties_typeProperties_userName": {
+			"value": "access-data-dev"
+		},
 		"LK_Sftp_properties_typeProperties_host": {
 			"value": "adlsdevfinalraw.blob.core.windows.net"
 		},
@@ -31,6 +40,9 @@
 		},
 		"LK_Snowflake_properties_typeProperties_database": {
 			"value": "ABAZURESNOW"
+		},
+		"LS_AZADLS_VB_CLOUD_RAW_properties_typeProperties_url": {
+			"value": "@{linkedService().storage_account_loc}"
 		},
 		"LS_JSON_ADLSRAW_properties_typeProperties_url": {
 			"value": "https://adlsdevfinalraw.dfs.core.windows.net/"

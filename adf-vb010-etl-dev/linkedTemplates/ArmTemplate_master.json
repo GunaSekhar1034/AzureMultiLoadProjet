@@ -23,6 +23,18 @@
 			"type": "string",
 			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
 		},
+		"LK_AzureSql_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-srvr-vb-dev-f.database.windows.net"
+		},
+		"LK_AzureSql_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "sql-db-vb-dev"
+		},
+		"LK_AzureSql_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "access-data-dev"
+		},
 		"LK_Sftp_properties_typeProperties_host": {
 			"type": "string",
 			"defaultValue": "adlsdevfinalraw.blob.core.windows.net"
@@ -42,6 +54,10 @@
 		"LK_Snowflake_properties_typeProperties_database": {
 			"type": "string",
 			"defaultValue": "ABAZURESNOW"
+		},
+		"LS_AZADLS_VB_CLOUD_RAW_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().storage_account_loc}"
 		},
 		"LS_JSON_ADLSRAW_properties_typeProperties_url": {
 			"type": "string",
@@ -106,6 +122,9 @@
 					"Key_SnowFlake_properties_typeProperties_baseUrl": {
 						"value": "[parameters('Key_SnowFlake_properties_typeProperties_baseUrl')]"
 					},
+					"LS_AZADLS_VB_CLOUD_RAW_properties_typeProperties_url": {
+						"value": "[parameters('LS_AZADLS_VB_CLOUD_RAW_properties_typeProperties_url')]"
+					},
 					"LS_JSON_ADLSRAW_properties_typeProperties_url": {
 						"value": "[parameters('LS_JSON_ADLSRAW_properties_typeProperties_url')]"
 					},
@@ -114,6 +133,15 @@
 					},
 					"SQL_local_pswd_properties_typeProperties_baseUrl": {
 						"value": "[parameters('SQL_local_pswd_properties_typeProperties_baseUrl')]"
+					},
+					"LK_AzureSql_properties_typeProperties_server": {
+						"value": "[parameters('LK_AzureSql_properties_typeProperties_server')]"
+					},
+					"LK_AzureSql_properties_typeProperties_database": {
+						"value": "[parameters('LK_AzureSql_properties_typeProperties_database')]"
+					},
+					"LK_AzureSql_properties_typeProperties_userName": {
+						"value": "[parameters('LK_AzureSql_properties_typeProperties_userName')]"
 					},
 					"LK_Sftp_properties_typeProperties_host": {
 						"value": "[parameters('LK_Sftp_properties_typeProperties_host')]"
