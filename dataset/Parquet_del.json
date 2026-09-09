@@ -6,7 +6,10 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"FileName": {
+			"TgtDirectory": {
+				"type": "string"
+			},
+			"Filename": {
 				"type": "string"
 			}
 		},
@@ -16,11 +19,11 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@dataset().FileName",
+					"value": "@dataset().Filename",
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@concat(\n    'CSV/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
+					"value": "@concat(\n    dataset().TgtDirectory,\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
 					"type": "Expression"
 				},
 				"fileSystem": "input"
