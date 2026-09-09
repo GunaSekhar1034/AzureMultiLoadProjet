@@ -1,5 +1,5 @@
 {
-	"name": "Parquet_del",
+	"name": "DS_CSV_PARQUET",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DL_ADLSSRC",
@@ -23,7 +23,7 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@concat(\n    dataset().TgtDirectory,\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
+					"value": "@concat(\n    dataset().TgtDirectory,'/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
 					"type": "Expression"
 				},
 				"fileSystem": "input"
