@@ -168,6 +168,10 @@
 							"filename": {
 								"value": "@activity('LKUP_JOB_DETAILS').output.firstRow.sourcefile",
 								"type": "Expression"
+							},
+							"TGT_Directory": {
+								"value": "@activity('LKUP_JOB_DETAILS').output.firstRow.targetdirectory",
+								"type": "Expression"
 							}
 						}
 					}
