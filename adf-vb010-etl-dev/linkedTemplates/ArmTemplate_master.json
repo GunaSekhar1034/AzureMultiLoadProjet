@@ -83,6 +83,14 @@
 			"type": "string",
 			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
 		},
+		"LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().storage_account_loc}"
+		},
+		"trigger1_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/f2ffe78a-9efd-46b7-aa00-1775097eab64/resourceGroups/VB_DEV_B10_ETL/providers/Microsoft.Storage/storageAccounts/adlsdevbstdblob"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -134,6 +142,9 @@
 					"SQL_local_pswd_properties_typeProperties_baseUrl": {
 						"value": "[parameters('SQL_local_pswd_properties_typeProperties_baseUrl')]"
 					},
+					"LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url": {
+						"value": "[parameters('LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url')]"
+					},
 					"LK_AzureSql_properties_typeProperties_server": {
 						"value": "[parameters('LK_AzureSql_properties_typeProperties_server')]"
 					},
@@ -184,11 +195,34 @@
 					},
 					"LS_SqlServer_properties_typeProperties_userName": {
 						"value": "[parameters('LS_SqlServer_properties_typeProperties_userName')]"
+					},
+					"trigger1_properties_typeProperties_scope": {
+						"value": "[parameters('trigger1_properties_typeProperties_scope')]"
 					}
 				}
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'adf-vb010-etl-dev_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "adf-vb010-etl-dev_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-vb010-etl-dev_ArmTemplate_1')]"
 			]
 		}
 	]
