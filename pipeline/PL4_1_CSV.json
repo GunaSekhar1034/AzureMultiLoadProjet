@@ -39,6 +39,8 @@
 			{
 				"name": "SP-START-LOG-ENTRY",
 				"type": "SqlServerStoredProcedure",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "LKUP_JOB_DETAILS",
@@ -99,6 +101,8 @@
 			{
 				"name": "CPY-CSV",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "SP-START-LOG-ENTRY",
