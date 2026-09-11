@@ -55,6 +55,10 @@
 			"type": "string",
 			"defaultValue": "ABAZURESNOW"
 		},
+		"LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().storage_account_loc}"
+		},
 		"LS_AZADLS_VB_CLOUD_RAW_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().storage_account_loc}"
@@ -83,9 +87,9 @@
 			"type": "string",
 			"defaultValue": "https://sqlServerPswd.vault.azure.net/"
 		},
-		"LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url": {
+		"trigger1_properties_typeProperties_scope": {
 			"type": "string",
-			"defaultValue": "@{linkedService().storage_account_loc}"
+			"defaultValue": "/subscriptions/f2ffe78a-9efd-46b7-aa00-1775097eab64/resourceGroups/VB_DEV_B10_ETL/providers/Microsoft.Storage/storageAccounts/adlsdevbstdblob"
 		},
 		"trigger_Blob_adls_properties_typeProperties_scope": {
 			"type": "string",
@@ -130,6 +134,9 @@
 					"Key_SnowFlake_properties_typeProperties_baseUrl": {
 						"value": "[parameters('Key_SnowFlake_properties_typeProperties_baseUrl')]"
 					},
+					"LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url": {
+						"value": "[parameters('LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url')]"
+					},
 					"LS_AZADLS_VB_CLOUD_RAW_properties_typeProperties_url": {
 						"value": "[parameters('LS_AZADLS_VB_CLOUD_RAW_properties_typeProperties_url')]"
 					},
@@ -141,9 +148,6 @@
 					},
 					"SQL_local_pswd_properties_typeProperties_baseUrl": {
 						"value": "[parameters('SQL_local_pswd_properties_typeProperties_baseUrl')]"
-					},
-					"LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url": {
-						"value": "[parameters('LS_AZADLS_EXCELCOPY_CLOUD_SRC_properties_typeProperties_url')]"
 					},
 					"LK_AzureSql_properties_typeProperties_server": {
 						"value": "[parameters('LK_AzureSql_properties_typeProperties_server')]"
@@ -159,15 +163,6 @@
 					},
 					"LK_Sftp_properties_typeProperties_userName": {
 						"value": "[parameters('LK_Sftp_properties_typeProperties_userName')]"
-					},
-					"LK_SnowFlake_Blob_Stage_sasUri": {
-						"value": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]"
-					},
-					"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
-						"value": "[parameters('LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName')]"
-					},
-					"LK_Snowflake_properties_typeProperties_database": {
-						"value": "[parameters('LK_Snowflake_properties_typeProperties_database')]"
 					}
 				}
 			},
@@ -187,6 +182,15 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"LK_SnowFlake_Blob_Stage_sasUri": {
+						"value": "[parameters('LK_SnowFlake_Blob_Stage_sasUri')]"
+					},
+					"LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName": {
+						"value": "[parameters('LK_SnowFlake_Blob_Stage_properties_typeProperties_sasToken_secretName')]"
+					},
+					"LK_Snowflake_properties_typeProperties_database": {
+						"value": "[parameters('LK_Snowflake_properties_typeProperties_database')]"
+					},
 					"LS_SqlServer_properties_typeProperties_server": {
 						"value": "[parameters('LS_SqlServer_properties_typeProperties_server')]"
 					},
@@ -195,9 +199,6 @@
 					},
 					"LS_SqlServer_properties_typeProperties_userName": {
 						"value": "[parameters('LS_SqlServer_properties_typeProperties_userName')]"
-					},
-					"trigger_Blob_adls_properties_typeProperties_scope": {
-						"value": "[parameters('trigger_Blob_adls_properties_typeProperties_scope')]"
 					}
 				}
 			},
@@ -218,6 +219,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"trigger1_properties_typeProperties_scope": {
+						"value": "[parameters('trigger1_properties_typeProperties_scope')]"
+					},
+					"trigger_Blob_adls_properties_typeProperties_scope": {
+						"value": "[parameters('trigger_Blob_adls_properties_typeProperties_scope')]"
 					}
 				}
 			},
