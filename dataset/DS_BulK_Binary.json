@@ -1,0 +1,21 @@
+{
+	"name": "DS_BulK_Binary",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DL_ADLSSRC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(\n    'BulkLoad/',\n    formatDateTime(utcNow(),'yyyy'),'/',\n    formatDateTime(utcNow(),'MM'),'/',\n    formatDateTime(utcNow(),'dd')\n)",
+					"type": "Expression"
+				},
+				"fileSystem": "input"
+			}
+		}
+	}
+}
