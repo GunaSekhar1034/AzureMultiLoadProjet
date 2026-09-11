@@ -2,7 +2,7 @@
 	"name": "trigger_Blob_adls",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
